@@ -1,6 +1,6 @@
 ![Azure](https://assets.cloud.im/prod/ux1/images/logos/azure/azure-2x.png)
 
-Remote backend with Azure Storage Account, please check https://www.mikaelkrief.com/terraform-remote-backend-azure/
+Remote backend with Azure Storage Account and RBAC.
     
 # Initialise Deployment for Infrastructure for implementing a cluster with default values
 
@@ -14,11 +14,12 @@ This is using service principal for application and storage for keeping terrafor
 
 
 ## Possible Improvements or Security issue
+
 * Security key not encrypted, will need to use Vault 
 * Disaster Recovery
 * MakeFile
 
-### Pre-requisites
+## Pre-requisites
 
 1. terraform
 
@@ -28,8 +29,15 @@ This is using service principal for application and storage for keeping terrafor
 
 1. Storage setup using tstate
 
-### Precaution
+## References
+
+https://www.mikaelkrief.com/terraform-remote-backend-azure/
+https://medium.com/@chrisedrego/deep-dive-with-provisioning-aks-rbac-enabled-kubernetes-cluster-using-terraform-895587ddc027
+
+>
+## Precaution
 When deploying any resources, you can risk to recreate or delete any resources. Please consult this excellent blog around this process. [Reference] (https://coderbook.com/@marcus/prevent-terraform-from-recreating-or-deleting-resource/)
+
 
 For example using such code can protect any stateful resource:
 
