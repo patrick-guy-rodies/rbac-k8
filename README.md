@@ -5,12 +5,13 @@ Remote backend with Azure Storage Account and RBAC.
 # Initialise Deployment for Infrastructure for implementing a cluster with default values
 
 This repo contains all the code required to deploy & configure a AKS cluster latest version
-This is using service principal for application and storage for keeping terraform state
+This is using service principal for application, RBAC  and storage for keeping terraform state
 
 ## Key features
 
 * AKS cluster of three nodes in Northern Region
-* Linux OS with 30 gb disk
+* Linux OS with 100 gb disk
+* RBAC
 
 
 ## Possible Improvements or Security issue
@@ -31,12 +32,13 @@ This is using service principal for application and storage for keeping terrafor
 
 ## References
 
-https://www.mikaelkrief.com/terraform-remote-backend-azure/
-https://medium.com/@chrisedrego/deep-dive-with-provisioning-aks-rbac-enabled-kubernetes-cluster-using-terraform-895587ddc027
+1. https://www.mikaelkrief.com/terraform-remote-backend-azure/
 
->
+1. https://medium.com/@chrisedrego/deep-dive-with-provisioning-aks-rbac-enabled-kubernetes-cluster-using-terraform-895587ddc027
+
+
 ## Precaution
-When deploying any resources, you can risk to recreate or delete any resources. Please consult this excellent blog around this process. [Reference] (https://coderbook.com/@marcus/prevent-terraform-from-recreating-or-deleting-resource/)
+> When deploying any resources, you can risk to recreate or delete any resources. Please consult this excellent blog around this process: [Reference](https://coderbook.com/@marcus/prevent-terraform-from-recreating-or-deleting-resource/)
 
 
 For example using such code can protect any stateful resource:
@@ -53,7 +55,7 @@ resource "azure_vm" "db" {
 
 ### Deploying
 
-1. Clone the [patrickguyrodies/k8cluster](bitbucket.org:patrickguyrodies/k8cluster.git) repo and cd into the root of the repo.
+1. Clone the [patrickguyrodies/rbac-k8](bitbucket.org:patrickguyrodies/rbac-k8.git) repo and cd into the root of the repo.
 
 1. Initialise state and Import stateful resources
     
