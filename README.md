@@ -43,7 +43,7 @@ This is using service principal for application, RBAC  and storage for keeping t
 
 For example using such code can protect any stateful resource:
 
-```json
+``` json
 
 resource "azure_vm" "db" {
     lifecycle {
@@ -57,39 +57,123 @@ resource "azure_vm" "db" {
 
 1. Clone the [patrickguyrodies/rbac-k8](bitbucket.org:patrickguyrodies/rbac-k8.git) repo and cd into the root of the repo.
 
-1. Initialise state and Import stateful resources
-    
-    As some resources (subscription, service principal, storage) will be created manually and kept out of scope for this example, we will remove them from Terraform state declaration. We are also using Terraform r
+1. Export service principal key as environment variable
 
-                $ terraform init -backend-config="storage_account_name=storagepgr095" -backend-config="container_name=tfstate" -backend-config="access_key=A3DK/CM7WO/+N5pmCNDYUwSheaUfcdViSEXG+VgAgxsWnrj5Z3uywEchHRRaPi+9JWzDs7Vxxy6aCEZDv+T1Xw==" -backend-config="key=codelab.microsoft.tfstate"
+``` bash
 
-    1. Import resource group
+$ cat  export SUBID="XXXXXXXXXXXXX" >> ~/.zshenv
+$ cat  export CLIENTID="XXXXXXXXXXXXX" >> ~/.zshenv
+$ cat  export TENANTID="XXXXXXXXXXXXX" >> ~/.zshenv        
+$ source ~/.zshenv
 
-                $ terraform import azurerm_resource_group.staticevent /subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourceGroups/rgpazewsmlit-sandbox-pgr095-001
+```
+1. Explaining three files needed to create your cluster
 
-                $ terraform import azurerm_resource_group.example /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/group1
-
-                $ terraform import azurerm_log_analytics_workspace.test /subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourcegroups/rgpazewsmlit-sandbox-pgr095-001/providers/microsoft.operationalinsights/workspaces/testloganalyticsworkspacename
-
-1. Create clusters
-    1. Export your service principal credentials
-
-
-                $ export TF_VAR_client_id=<your-client-id>
-                $ export TF_VAR_client_secret=<your-client-secret> 
+    1. main.tf
         
-        Export your service principal credentials (Keybase sandbox resourcegroup txt file for Patrick example). Replace the <your-client-id> and <your-client-secret> placeholders with the appId and password values associated with your sandbox credential.
+        As we already know, that terraform can be used to provision cloud resources on multiple cloud providers such as AWS, Azure, GCP, Heroku. a provider is responsible for understanding API interactions and exposing resources. The provider comes into the picture at the very initial phase while interacting with the Cloud Provider (Azure), as you can call it as an entry point to decide which cloud provider would we be provisioning the resources. To understand more about the various cloud providers that terraform has to offer to refer to the official link
+        
+        In this block, we watch carefully we are specifying the Azure (arurerm) Azure Resource Manager provider along with the credentials from the Service Principal to authenticate to Azure. The version can be found using command line:
 
-    1. Run Terraform plan
+        ``` bash
+        
+        $ az --version
 
-                $ terraform plan -out out.plan
+        azure-cli                         2.16.0
+
+        core                              2.16.0
+        telemetry                          1.0.6
+
+        Extensions:
+        aks-preview                       0.4.70
+
+        Python location '/usr/local/Cellar/azure-cli/2.16.0/libexec/bin/python'
+        Extensions directory '/Users/xxxxxxxx/.azure/cliextensions'
+
+        Python (Darwin) 3.8.6 (default, Nov 20 2020, 23:57:10)
+        [Clang 12.0.0 (clang-1200.0.32.27)]
+
+        Legal docs and information: aka.ms/AzureCliLegal
+
+
+        Your CLI is up-to-date.
+
+        Please let us know how we are doing: https://aka.ms/azureclihats
+        and let us know if you're interested in trying out our newest features: https://aka.ms/CLIUXstudy
+
+        ```
+
+
+    1. variables.tf
+
+        Many of the values in the main.tf were not hardcoded, rather all of them refer to var followed by the name of the variables all of these variables are specified in these variables.tf.
+        > Please make note that its not recommended approach to store secrets/credentials in plain text variables.tf file, you should store these variables in environment variables if in case of CI/CD environment as the secret to avoid exposure and thereby hampering the security.
+        TF_VAR_name as explained in https://www.terraform.io/docs/commands/environment-variables.html, please refer to Export service principal item above.
+
+1. Terraform Stages
+
+    1. Terraform init
+
+        init is used to initialize the current module or folder which contains the main.tf. If there is any cloud provider block defined inside main.tf in the current directory where terraform init command is run, it goes ahead and downloads the binary needed in order to communicate with APIs of the specific cloud provider.
+
+        ``` bash
+
+        $ terraform init
+
+        Initializing the backend...
+
+        Initializing provider plugins...
+        - Checking for available provider plugins...
+        - Downloading plugin for provider "azurerm" (hashicorp/azurerm) 2.16.0...
+
+        Terraform has been successfully initialized!
+
+        You may now begin working with Terraform. Try running "terraform plan" to see
+        any changes that are required for your infrastructure. All Terraform commands
+        should now work.
+
+        If you ever set or change modules or backend configuration for Terraform,
+        rerun this command to reinitialize your working directory. If you forget, other
+        commands will detect it and remind you to do so if necessary.
+
+        ```
+        After initialising the folder, we will need to create some resource manually to keep them out of scope, we will remove them from Terraform state declaration.
+        In the import below we are using rbac-tutorial name for main.tf.
+
+        ``` bash
+
+        $ terraform import azurerm_resource_group.rbac-tutorial /subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourceGroups/rgpazewsmlit-sandbox-pgr095-001
+        azurerm_resource_group.rbac-tutorial: Importing from ID "/subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourceGroups/rgpazewsmlit-sandbox-pgr095-001"...
+        azurerm_resource_group.rbac-tutorial: Import prepared!
+        Prepared azurerm_resource_group for import
+        azurerm_resource_group.rbac-tutorial: Refreshing state... [id=/subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourceGroups/rgpazewsmlit-sandbox-pgr095-001]
+
+        Import successful!
+
+        The resources that were imported are shown above. These resources are now in
+        your Terraform state and will henceforth be managed by Terraform.
+
+        ```
+    
+    1. Terraform plan
+
+        ``` bash
+        
+        $ terraform plan -out out.plan
+
+        ```
+    Check the output for + create or ~ update in-place signs to make sure that correct resources will be created, updated or deleted
 
     1. Apply plan
 
         Run the terraform apply command to apply the plan to create the Kubernetes cluster. The process to create a Kubernetes cluster can take several minutes, resulting in the Cloud Shell session timing out. If the Cloud Shell session times out, you can follow the steps in the section "Recover from a Cloud Shell timeout" to enable you to complete the tutorial.
+        
+        ``` bash
 
-                $ terraform apply out.plan
+        $ terraform apply out.plan
 
+        ```
+        
     1. Browse your new cluster
 
         1. UI using az cli
