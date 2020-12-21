@@ -171,27 +171,52 @@ $ source ~/.zshenv
         ``` bash
 
         $ terraform apply out.plan
+        terraform apply out.plan                                                                                                                          
 
+        azurerm_resource_group.rbac-tutorial: Modifying... [id=/subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourceGroups/rgpazewsmlit-sandbox-pgr095-001]
+        azurerm_kubernetes_cluster.rbac-tutorial: Creating...
+        azurerm_resource_group.rbac-tutorial: Modifications complete after 1s [id=/subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourceGroups/rgpazewsmlit-sandbox-pgr095-001]
+        azurerm_kubernetes_cluster.rbac-tutorial: Still creating... [4m0s elapsed]
+        azurerm_kubernetes_cluster.rbac-tutorial: Creation complete after 4m7s [id=/subscriptions/a4fe28da-0262-4b49-a9ea-7f2bba03f85b/resourcegroups/rgpazewsmlit-sandbox-pgr095-001/providers/Microsoft.ContainerService/managedClusters/RBAC-TUTORIAL]
+
+        Apply complete! Resources: 1 added, 1 changed, 0 destroyed.
+
+        The state of your infrastructure has been saved to the path
+        below. This state is required to modify and destroy your
+        infrastructure, so keep it safe. To inspect the complete state
+        use the `terraform show` command.
+
+        State path: terraform.tfstate
         ```
-        
+
     1. Browse your new cluster
 
         1. UI using az cli
+             ``` bash
 
-                $ az aks browse --name <cluster name> --resource-group <resource group name for cluster>
+            $ az aks browse --name <cluster name> --resource-group <resource group name for cluster>
+
+             ```
 
         1. UI using kubectl proxy
             The UI is not installed by default, please check https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 
-                $ az aks get-credentials --resource-group rgpazewsmlit-sandbox-pgr095-001 --name cstaticevent
+             ``` bash
+
+            $ az aks get-credentials --resource-group rgpazewsmlit-sandbox-pgr095-001 --name RBAC-K8
+
+            The behavior of this command has been altered by the following extension: aks-preview
+            Merged "RBAC-TUTORIAL" as current context in /Users/patrickrodies/.kube/config
                 
             Output will be saved in ~/.kube/config
 
-                $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+            $ kubectl apply -f kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml
 
-                $ kubectl proxy
+            $ kubectl proxy
 
             You can use http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/overview?namespace=default to go to your cluster. The login can use the default config file on ~/.kube/config
+             
+            ```
 
         1. UI using third party tool such as Octant
 
