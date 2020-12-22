@@ -203,7 +203,7 @@ $ source ~/.zshenv
 
              ``` bash
 
-            $ az aks get-credentials --resource-group rgpazewsmlit-sandbox-pgr095-001 --name RBAC-K8
+            $ az aks get-credentials --subscription a4fe28da-0262-4b49-a9ea-7f2bba03f85b --resource-group rgpazewsmlit-sandbox-pgr095-001 --name RBAC-K8
 
             The behavior of this command has been altered by the following extension: aks-preview
             Merged "RBAC-TUTORIAL" as current context in /Users/patrickrodies/.kube/config
