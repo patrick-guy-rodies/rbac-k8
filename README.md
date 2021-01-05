@@ -55,7 +55,7 @@ resource "azure_vm" "db" {
 
 ### Deploying
 
-1. Clone the [patrickguyrodies/rbac-k8](bitbucket.org:patrickguyrodies/rbac-k8.git) repo and cd into the root of the repo.
+1. Clone the [patrick-guy-rodies/rbac-k8](https://github.com/patrick-guy-rodies/rbac-k8.git) repo and cd into the root of the repo.
 
 1. Export service principal key as environment variable
 
@@ -221,6 +221,10 @@ $ source ~/.zshenv
         1. UI using third party tool such as Octant
 
             Follow instructions: https://github.com/vmware-tanzu/octant
+    
+    1. Start and Stop your cluster to reduce cost
+
+        Please check [patrick-guy-rodies/start-stop-aks](https://github.com/patrick-guy-rodies/start-stop-aks)
 
 ## Destroying cluster
 
