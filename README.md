@@ -162,7 +162,7 @@ $ source ~/.zshenv
         $ terraform plan -out out.plan
 
         ```
-    Check the output for + create or ~ update in-place signs to make sure that correct resources will be created, updated or deleted
+        Check the output for + create or ~ update in-place signs to make sure that correct resources will be created, updated or deleted
 
     1. Apply plan
 
@@ -222,9 +222,15 @@ $ source ~/.zshenv
 
             Follow instructions: https://github.com/vmware-tanzu/octant
     
-    1. Start and Stop your cluster to reduce cost
+1. Start and Stop your cluster to reduce cost
 
-        Please check [patrick-guy-rodies/start-stop-aks](https://github.com/patrick-guy-rodies/start-stop-aks)
+    Please check [patrick-guy-rodies/start-stop-aks](https://github.com/patrick-guy-rodies/start-stop-aks)
+
+    ``` bash
+
+        $ ~/Applications/start-stop-aks stop RBAC-TUTORIAL #use start, stop or show as command
+
+    ```
 
 ## Destroying cluster
 
