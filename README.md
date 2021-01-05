@@ -231,6 +231,10 @@ $ source ~/.zshenv
         $ ~/Applications/start-stop-aks stop RBAC-TUTORIAL #use start, stop or show as command
 
     ```
+1. Using Waypoint to Build, Deploy and Release artifacts
+
+    Please check [patrick-guy-rodies/waypoint-AKS](https://github.com/patrick-guy-rodies/waypoint-AKS)
+
 
 ## Destroying cluster
 
