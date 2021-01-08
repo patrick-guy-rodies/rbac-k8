@@ -235,6 +235,14 @@ $ source ~/.zshenv
 
     Please check [patrick-guy-rodies/waypoint-AKS](https://github.com/patrick-guy-rodies/waypoint-AKS)
 
+1. Prometheus
+
+    1. Metrics server: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+    1. Helm installation for Prometheus
+        1. helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        1. helm repo add stable https://charts.helm.sh/stable
+        1. helm repo update
+        1. helm -n monitoring install v2.23 prometheus-community/kube-prometheus-stack
 
 ## Destroying cluster
 
