@@ -250,4 +250,3 @@ $ source ~/.zshenv
 
 
                 $ terraform apply destroy.plan
-
